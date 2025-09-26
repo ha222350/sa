@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-  "start": "react-scripts build && node server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.0.1",
     "axios": "^0.21.1",
     "jspdf": "^3.0.3",
     "jspdf-autotable": "^5.0.2",

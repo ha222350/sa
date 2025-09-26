@@ -164,7 +164,7 @@ export const resetPassword = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Invalid or expired token' });
         }
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-        await query('UPDATE user SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?', [hashedPassword, user.id]);
+    await query('UPDATE user SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE user_id = ?', [hashedPassword, user.user_id]);
         return res.status(200).json({ message: 'Password reset successful!' });
     } catch (error) {
         return res.status(400).json({ message: 'Invalid or expired token', error });

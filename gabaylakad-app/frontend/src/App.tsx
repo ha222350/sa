@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import DeviceFeatures from './components/DeviceFeatures';
 import Verify from './pages/Verify';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Error Boundary for catching rendering errors
 class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: any}> {
@@ -35,9 +35,9 @@ const App: React.FC = () => {
                     <Route path="/" element={<Login />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    { <Route path="/dashboard" element={<Dashboard />} /> }
                     <Route path="/verify" element={<Verify />} />
-                    <Route path="/features" element={<DeviceFeatures />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Routes>
             </Router>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -60,6 +61,11 @@ const ForgotPassword: React.FC = () => {
                         <a href={previewUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Ethereal test email</a>
                     </div>
                 )}
+                <div className="mt-6 text-center">
+                    <Link to="/login" className="btn-primary w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 font-semibold text-lg transition-all inline-block">
+                        Login
+                    </Link>
+                </div>
             </div>
         </div>
     );
