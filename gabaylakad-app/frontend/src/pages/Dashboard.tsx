@@ -30,9 +30,9 @@ interface DashboardData {
 }
 
 // Config flag for simulation/API mode
-const USE_SIMULATION = true; // Set to false for API mode
+const USE_SIMULATION = true;
 
-// Dummy data for simulation mode
+// Dummy data for simulation mode - matching your screenshot exactly
 const dummyData: DashboardData = {
   user: {
     name: 'Joanna Marie Baguio',
@@ -41,23 +41,22 @@ const dummyData: DashboardData = {
     serial_number: 'GL001',
     device_active: true,
   },
-  caregiver: { name: 'Kevin Keith P. Selisana', phone_number: '+63 912 345 6789' },
-  lastSync: '5 seconds ago',
-  currentLocation: 'Ayala Center',
-  locationUpdate: '10 seconds ago',
-  batteryLevel: '78%',
+  caregiver: { name: 'Kevin Keith P. Sellisma', phone_number: '+63 918 214 9193' },
+  lastSync: '7 seconds ago',
+  currentLocation: 'SM City Cebu',
+  locationUpdate: '3 minutes ago',
+  batteryLevel: '65%',
   batteryTime: '~6 hours remaining',
   activityText: 'WALKING',
-  stepCount: '1,247',
+  stepCount: '1,776',
   activityLog: [
-    { title: 'Entered Ayala Center', details: 'Automatic check-in via geofence', time: '5 minutes ago', icon: 'fas fa-map-marker-alt', color: '#e74c3c' },
+    { title: 'Entered SM City Cebu', details: 'Automatic check-in via geofence', time: '5 minutes ago', icon: 'fas fa-map-marker-alt', color: '#e74c3c' },
     { title: 'Obstacle Detected', details: '0.8m ahead, slight right turn suggested', time: '10 minutes ago', icon: 'fas fa-exclamation-triangle', color: '#f1c40f' },
     { title: 'Battery Level Normal', details: 'Battery at 82%', time: '15 minutes ago', icon: 'fas fa-battery-full', color: '#2ecc71' },
     { title: 'Walking Detected', details: 'Speed: 2.1 km/h', time: '20 minutes ago', icon: 'fas fa-walking', color: '#3498db' },
   ],
 };
 
-// Fetch data from API (if not simulation)
 const fetchDashboardData = async (): Promise<DashboardData> => {
   const res = await fetch('http://localhost:5000/api/dashboard');
   return await res.json();
@@ -74,79 +73,120 @@ const DashboardPage: React.FC = () => {
       const interval = setInterval(() => {
         setData(prev => ({
           ...prev,
-          lastSync: `${Math.floor(Math.random() * 10) + 1} seconds ago`,
-          batteryLevel: `${Math.floor(Math.random() * 20) + 70}%`,
-          stepCount: `${Math.floor(Math.random() * 500) + 1000}`,
+          lastSync: `${Math.floor(Math.random() * 10)} seconds ago`,
+          batteryLevel: `${Math.floor(Math.random() * 20) + 60}%`,
+          stepCount: `${Math.floor(Math.random() * 500) + 1500}`,
         }));
-      }, 3000);
+      }, 5000);
       return () => clearInterval(interval);
     }
   }, []);
 
   return (
-    <div className="dashboard-fullscreen">
+    <div className="dashboard-container">
       <Sidebar />
-      <main className="main-content">
-        <div className="dashboard-header">Monitoring Dashboard</div>
-        {/* Patient Info Card */}
-        <div className="dashboard-card bg-gradient-to-r from-blue-400 to-purple-500 text-white mb-8 flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full bg-teal-400 flex items-center justify-center text-2xl font-bold mb-4">
-            {data.user.name.split(' ').map(w => w[0]).join('').slice(0,2)}
+      <main className="main-content-full">
+        <div className="dashboard-content">
+          {/* Header */}
+          <div className="dashboard-header-section">
+            <h1>Monitoring Dashboard</h1>
           </div>
-          <div className="text-xl font-bold mb-2">{data.user.name}</div>
-          <div className="mb-2">Age: {data.user.age} • Condition: {data.user.impairment_level}</div>
-          <div className="mb-2">Emergency Contact: {data.caregiver.name} (Caregiver) - {data.caregiver.phone_number}</div>
-          <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2 font-semibold">Smart Stick #{data.user.serial_number} - {data.user.device_active ? 'Connected' : 'Disconnected'}</div>
-        </div>
-        {/* Stats Grid */}
-        <div className="dashboard-cards">
-          <div className="dashboard-card">
-            <div className="text-purple-700 font-bold mb-2">Device Status</div>
-            <div className="text-2xl font-bold mb-2"><span className="text-green-500"><i className="fas fa-walking"></i> {data.user.device_active ? 'Online' : 'Offline'}</span></div>
-            <div className="text-gray-500"><i className="fas fa-wifi"></i> Last sync: {data.lastSync}</div>
+
+          {/* Patient Info */}
+          <div className="patient-info-section">
+            <h2>{data.user.name}</h2>
+            <p>Age: {data.user.age} - Condition: {data.user.impairment_level}</p>
+            <p>Emergency Contact: {data.caregiver.name} (Caregiver) - {data.caregiver.phone_number}</p>
+            <div className="device-status">
+              <strong>Smart Stick #{data.user.serial_number} - Connected</strong>
+            </div>
           </div>
-          <div className="dashboard-card">
-            <div className="text-purple-700 font-bold mb-2">Current Location</div>
-            <div className="text-2xl font-bold mb-2">{data.currentLocation}</div>
-            <div className="text-gray-500"><i className="fas fa-clock"></i> Updated {data.locationUpdate}</div>
-          </div>
-          <div className="dashboard-card">
-            <div className="text-purple-700 font-bold mb-2">Battery Level</div>
-            <div className="text-2xl font-bold mb-2">{data.batteryLevel}</div>
-            <div className="text-gray-500"><i className="fas fa-battery-three-quarters"></i> {data.batteryTime}</div>
-          </div>
-          <div className="dashboard-card">
-            <div className="text-purple-700 font-bold mb-2">Activity Status</div>
-            <div className="text-2xl font-bold mb-2"><i className="fas fa-walking"></i> {data.activityText}</div>
-            <div className="text-gray-500"><i className="fas fa-shoe-prints"></i> {data.stepCount} steps today</div>
-          </div>
-          <div className="dashboard-card">
-            <div className="text-purple-700 font-bold mb-2">EMERGENCY SYSTEM</div>
-            <div className="text-2xl font-bold mb-2"><span className="text-green-500"><i className="fas fa-check"></i> Ready</span></div>
-            <div className="text-gray-500"><i className="fas fa-mobile-alt"></i> SMS alerts via GSM network</div>
-          </div>
-          <div className="dashboard-card">
-            <div className="text-purple-700 font-bold mb-2">NIGHT REFLECTOR</div>
-            <div className="text-2xl font-bold mb-2"><span className="text-yellow-400"><i className="fas fa-sun"></i> Active</span></div>
-            <div className="text-gray-500"><i className="fas fa-lightbulb"></i> Auto-activates in low light</div>
-          </div>
-        </div>
-        {/* Activity Feed */}
-        <ExportButtons activityLog={data.activityLog} />
-        <div className="dashboard-card">
-          <div className="text-purple-700 font-bold mb-4 flex items-center"><i className="fas fa-history mr-2"></i> Real-time Activity Log</div>
-          <ul>
-            {data.activityLog.map((item, idx) => (
-              <li className="flex items-center mb-4" key={idx}>
-                <div className="w-12 h-12 rounded-full flex items-center justify-center text-white text-xl mr-4" style={{ background: item.color }}><i className={item.icon}></i></div>
-                <div>
-                  <div className="font-bold text-gray-800">{item.title}</div>
-                  <div className="text-gray-500">{item.details}</div>
-                  <div className="text-purple-700 font-semibold">{item.time}</div>
+
+          <hr className="section-divider" />
+
+          {/* Status Cards - Full Width Grid */}
+          <div className="status-grid-full">
+            {/* Device Status Card */}
+            <div className="status-card">
+              <div className="status-header">
+                <h3>DEVICE STATUS</h3>
+                <span className="online-badge">ONLINE</span>
+              </div>
+              <div className="status-content">
+                <p>Last sync: {data.lastSync}</p>
+                
+                <div className="location-section">
+                  <h4>CURRENT LOCATION</h4>
+                  <p className="location-name">{data.currentLocation}</p>
+                  <p className="location-update">• Updated {data.locationUpdate}</p>
                 </div>
-              </li>
-            ))}
-          </ul>
+              </div>
+            </div>
+
+            {/* Battery Level Card */}
+            <div className="status-card">
+              <div className="status-header">
+                <h3>BATTERY LEVEL</h3>
+                <span className="battery-value">{data.batteryLevel}</span>
+              </div>
+              <div className="status-content">
+                <p>{data.batteryTime}</p>
+              </div>
+            </div>
+
+            {/* Activity Status Card */}
+            <div className="status-card">
+              <div className="status-header">
+                <h3>ACTIVITY STATUS</h3>
+                <span className="activity-value">{data.activityText}</span>
+              </div>
+              <div className="status-content">
+                <p>{data.stepCount} steps today</p>
+              </div>
+            </div>
+
+            {/* Emergency System Card */}
+            <div className="status-card">
+              <div className="status-header">
+                <h3>EMERGENCY SYSTEM</h3>
+                <span className="ready-badge">READY</span>
+              </div>
+              <div className="status-content">
+                <p>SMS alerts via GSM network</p>
+              </div>
+            </div>
+
+            {/* Night Reflector Card */}
+            <div className="status-card">
+              <div className="status-header">
+                <h3>NIGHT REFLECTOR</h3>
+                <span className="active-badge">ACTIVE</span>
+              </div>
+              <div className="status-content">
+                <p>Auto-activates in low light</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Activity Log */}
+          <ExportButtons activityLog={data.activityLog} />
+          <div className="activity-log-section">
+            <h3>Recent Activity</h3>
+            <div className="activity-list">
+              {data.activityLog.map((item, idx) => (
+                <div key={idx} className="activity-item">
+                  <div className="activity-icon">
+                    <i className={item.icon} style={{ color: item.color }}></i>
+                  </div>
+                  <div className="activity-details">
+                    <strong>{item.title}</strong>
+                    <p>{item.details}</p>
+                    <span className="activity-time">{item.time}</span>
+                  </div>  
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
     </div>
